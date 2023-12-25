@@ -428,10 +428,10 @@ var config = {
   pixelArt: true,
   zoom: 1,
   scale: {
-    mode: Phaser.Scale.FIT,
+    mode: Phaser.Scale.RESIZE,  // Set the scale mode to RESIZE
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: 1100,
-    height: 1080,
+    width: '100%',              // Use '100%' for width to fill the screen
+    height: '100%',             // Use '100%' for height to fill the screen
   },
   physics: {
     default: "arcade",
