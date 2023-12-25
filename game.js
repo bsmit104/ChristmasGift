@@ -16,9 +16,11 @@ class Gameplay extends Phaser.Scene {
     this.load.image("chest", "chest.png");
     this.load.image("layla", "layla.png");
     this.load.image("ship", "ship.png");
+    this.load.image("hiccup", "hiccup.jpg");
     this.load.image("key", "key.png");
     this.load.image("james", "james_clement.png");
     this.load.image("syd", "syd.png");
+    this.load.image("bowser", "bowser.jpg");
     this.load.image("love", "love.png");
     this.load.image("bob", "enoki.png");
     this.load.image("rock", "rock.png");
@@ -65,6 +67,14 @@ class Gameplay extends Phaser.Scene {
     });
   }
 
+  onPlayerBowserOverlap(player, chest) {
+    // Change this to the name of your "note" scene
+    this.bowserText.setVisible(true);
+    this.time.delayedCall(2000, () => {
+      this.bowserText.setVisible(false); // Remove the text object
+    });
+  }
+
   onPlayerJamesOverlap(player, chest) {
     // Change this to the name of your "note" scene
     this.jamesText.setVisible(true);
@@ -86,6 +96,14 @@ class Gameplay extends Phaser.Scene {
     this.loveText.setVisible(true);
     this.time.delayedCall(2000, () => {
       this.loveText.setVisible(false); // Remove the text object
+    });
+  }
+
+  onPlayerHiccupOverlap(player, chest) {
+    // Change this to the name of your "note" scene
+    this.hiccupText.setVisible(true);
+    this.time.delayedCall(2000, () => {
+      this.hiccupText.setVisible(false); // Remove the text object
     });
   }
 
@@ -221,6 +239,14 @@ class Gameplay extends Phaser.Scene {
       .setScrollFactor(0)
       .setVisible(false);
 
+    this.bowserText = this.add
+      .text(this.cameras.main.width - 950, 300, "IM MOVIN TO THE COUNTRY, \nGONNA B EATIN ME A LOT A PEACHES\n(left a love note around\ny 5000)", {
+        fontSize: "40px",
+        fill: "#fff",
+      })
+      .setScrollFactor(0)
+      .setVisible(false);
+
     this.jamesText = this.add
       .text(this.cameras.main.width - 950, 300, "James from survivor? - you\nI saw a weird mushroom\nman around 4000 y - James from Survivor", {
         fontSize: "30px",
@@ -247,6 +273,14 @@ class Gameplay extends Phaser.Scene {
 
     this.spaceText = this.add
       .text(this.cameras.main.width - 850, 300, "hooligans", {
+        fontSize: "40px",
+        fill: "#fff",
+      })
+      .setScrollFactor(0)
+      .setVisible(false);
+
+    this.hiccupText = this.add
+      .text(this.cameras.main.width - 850, 300, "hiccup?\nDoNt MiNd mE\nJuSt LoOkInG 4 DrAgOns\nNoT TrEaSuRe (saw a \ndragon near 2000 y)", {
         fontSize: "40px",
         fill: "#fff",
       })
@@ -301,6 +335,16 @@ class Gameplay extends Phaser.Scene {
       .setScale(4)
       .setDepth(2);
 
+    this.hiccup = this.physics.add
+      .sprite(4000, 5000, "hiccup")
+      .setScale(.5)
+      .setDepth(2);
+
+    this.bowser = this.physics.add
+      .sprite(6000, 2000, "bowser")
+      .setScale(2)
+      .setDepth(2);
+
     this.enoki = this.physics.add
       .sprite(8000, 4000, "bob")
       .setScale(5)
@@ -345,8 +389,24 @@ class Gameplay extends Phaser.Scene {
 
     this.physics.add.overlap(
       player,
+      this.hiccup,
+      this.onPlayerHiccupOverlap,
+      null,
+      this
+    );
+
+    this.physics.add.overlap(
+      player,
       this.layla,
       this.onPlayerLaylaOverlap,
+      null,
+      this
+    );
+
+    this.physics.add.overlap(
+      player,
+      this.bowser,
+      this.onPlayerBowserOverlap,
       null,
       this
     );
