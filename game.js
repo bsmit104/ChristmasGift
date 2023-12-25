@@ -2,6 +2,7 @@ class Gameplay extends Phaser.Scene {
   constructor() {
     super("gameplay");
     this.speed = 2; 
+    this.isFullScreen = true;
   }
 
   preload() {
@@ -97,11 +98,45 @@ class Gameplay extends Phaser.Scene {
     }
     }
   }
+
+  toggleFullScreen() {
+    if (this.scale.isFullscreen) {
+      this.scale.stopFullscreen();
+    } else {
+      this.scale.startFullscreen();
+    }
+    this.isFullScreen = !this.isFullScreen;
+  }
   
   
   create() {
     this.cameras.main.setBackgroundColor("#e75480");
     cursors = this.input.keyboard.createCursorKeys();
+
+    this.fullscreenButton = this.add.text(
+      this.cameras.main.width - 20,
+      20,
+      'Fullscreen',
+      {
+          fontSize: '16px',
+          fill: '#fff',
+      }
+  );
+      // .setOrigin(0, 0)
+      // .setDepth(2)
+      // .setInteractive()
+      // .on('pointerdown', () => this.toggleFullScreen(), this);
+
+    const screenWidth = this.cameras.main.width;
+    const screenHeight = this.cameras.main.height;
+
+    this.playerCoordsText1 = this.add.text(this.cameras.main.width - 300, 50, 'FullScreen', {
+      fontSize: '20px',
+      fill: '#fff'
+    }).setScrollFactor(0);
+    this.playerCoordsText1.setScale(1.4);
+    this.playerCoordsText1.setInteractive();
+    this.playerCoordsText1.on('pointerdown', () => this.toggleFullScreen(), this);
 
     this.playerCoordsText = this.add.text(20, 50, 'Player Coordinates: 0, 0', {
       fontSize: '16px',
@@ -131,27 +166,34 @@ class Gameplay extends Phaser.Scene {
     this.physics.add.collider(rocks, enemyEnoki)
 
     // joystick
+    // this.joyStick = this.plugins.get('rexvirtualjoystickplugin').add(this, {
+    //   x: 200,
+    //   y: 800,
+    //   radius: 100,
+    //   base: this.add.circle(0, 0, 100, 0x888888),
+    //   thumb: this.add.circle(0, 0, 30, 0xcccccc),
+    // });
     this.joyStick = this.plugins.get('rexvirtualjoystickplugin').add(this, {
-      x: 200,
-      y: 800,
-      radius: 100,
-      base: this.add.circle(0, 0, 100, 0x888888),
-      thumb: this.add.circle(0, 0, 30, 0xcccccc),
+      x: screenWidth / 5,
+      y: screenHeight / 1.1,
+      radius: screenWidth / 10,
+      base: this.add.circle(0, 0, screenWidth / 10, 0x888888),
+      thumb: this.add.circle(0, 0, screenWidth / 30, 0xcccccc),
     });
 
     this.joystickCursors = this.joyStick.createCursorKeys();
 
     //enemyEnoki = this.physics.add.sprite(5500,5500,'enoki').setScale(3).setDepth(2);
-    this.time = Date.now();
+    // this.time = Date.now();
 
-    this.timerText = this.add.text(20, 20, 'Time: 0', {
-      fontSize: '24px',
-      fill: '#fff'
-    }).setScrollFactor(0); // Make the text stationary when the camera moves
+    // this.timerText = this.add.text(20, 20, 'Time: 0', {
+    //   fontSize: '24px',
+    //   fill: '#fff'
+    // }).setScrollFactor(0); // Make the text stationary when the camera moves
 
-    // ... (existing code)
+    // // ... (existing code)
 
-    this.startTime = this.time.now;
+    // this.startTime = this.time.now;
 
 
   }
@@ -447,10 +489,11 @@ var config = {
   pixelArt: true,
   zoom: 1,
   scale: {
-    mode: Phaser.Scale.RESIZE,  // Set the scale mode to RESIZE
+    mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: '100%',              // Use '100%' for width to fill the screen
-    height: '100%',             // Use '100%' for height to fill the screen
+    width: 1100,
+    height: 1080,
+    fullscreen: true, // Set fullscreen to true
   },
   physics: {
     default: "arcade",
