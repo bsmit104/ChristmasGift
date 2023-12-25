@@ -21,6 +21,7 @@ class Gameplay extends Phaser.Scene {
     this.load.image("james", "james_clement.png");
     this.load.image("syd", "syd.png");
     this.load.image("bowser", "bowser.jpg");
+    this.load.image("finn", "finn.jpg");
     this.load.image("love", "love.png");
     this.load.image("bob", "enoki.png");
     this.load.image("rock", "rock.png");
@@ -56,6 +57,14 @@ class Gameplay extends Phaser.Scene {
     this.monkeyText.setVisible(true);
     this.time.delayedCall(2000, () => {
       this.monkeyText.setVisible(false); // Remove the text object
+    });
+  }
+
+  onPlayerFinnOverlap(player, chest) {
+    // Change this to the name of your "note" scene
+    this.finnText.setVisible(true);
+    this.time.delayedCall(2000, () => {
+      this.finnText.setVisible(false); // Remove the text object
     });
   }
 
@@ -239,6 +248,14 @@ class Gameplay extends Phaser.Scene {
       .setScrollFactor(0)
       .setVisible(false);
 
+    this.finnText = this.add
+      .text(this.cameras.main.width - 950, 300, "IM A BUFF BABY THAT CAN DANCE LIKE A MAN", {
+        fontSize: "30px",
+        fill: "#fff",
+      })
+      .setScrollFactor(0)
+      .setVisible(false);
+
     this.bowserText = this.add
       .text(this.cameras.main.width - 950, 300, "IM MOVIN TO THE COUNTRY, \nGONNA B EATIN ME A LOT A PEACHES\n(left a love note around\ny 5000)", {
         fontSize: "40px",
@@ -333,6 +350,11 @@ class Gameplay extends Phaser.Scene {
     this.james = this.physics.add
       .sprite(5000, 6000, "james")
       .setScale(4)
+      .setDepth(2);
+
+    this.finn = this.physics.add
+      .sprite(8246, 734, "finn")
+      .setScale(.5)
       .setDepth(2);
 
     this.hiccup = this.physics.add
@@ -431,6 +453,14 @@ class Gameplay extends Phaser.Scene {
       player,
       this.love,
       this.onPlayerLoveOverlap,
+      null,
+      this
+    );
+
+    this.physics.add.overlap(
+      player,
+      this.finn,
+      this.onPlayerFinnOverlap,
       null,
       this
     );
@@ -758,7 +788,15 @@ class Note extends Phaser.Scene {
     const noteText = this.add.text(
       this.halfScreenWidth,
       this.halfScreenHeight,
-      "I will love you til the end of time.\nYou are the best part of my life.\nI love everything about you\nfrom your hair to your toes.\nI want to be my best self for you",
+      "I will love you til the end of time.\n" +
+      "You are the best part of my life.\n" +
+      "I love everything about you\n" +
+      "from your hair to your toes.\n" +
+      "I want to be my best self for you.\n" +
+      "Thank you for being the bestest friend\n" +
+      "and loveliest love anyone could\n" +
+      "ever ask for\n" +
+      "I love your infinitely, indefinitely\n",
       {
         fontSize: "40px",
         fill: "#fff",
@@ -766,6 +804,18 @@ class Note extends Phaser.Scene {
       }
     );
     noteText.setOrigin(0.5);
+
+    // const noteText = this.add.text(
+    //   this.halfScreenWidth,
+    //   this.halfScreenHeight,
+    //   "I will love you til the end of time.\nYou are the best part of my life.\nI love everything about you\nfrom your hair to your toes.\nI want to be my best self for you",
+    //   {
+    //     fontSize: "40px",
+    //     fill: "#fff",
+    //     align: "center",
+    //   }
+    // );
+    // noteText.setOrigin(0.5);
 
     // Add a button to start the game
     const startButton = this.add
