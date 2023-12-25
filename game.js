@@ -163,6 +163,12 @@ class Gameplay extends Phaser.Scene {
     this.cameras.main.setBackgroundColor("#466d1d");
     cursors = this.input.keyboard.createCursorKeys();
 
+    this.polylineGraphics = this.add.graphics({
+      lineStyle: { width: 5, color: 0xff0000 },
+    });
+
+    this.playerPath = [];
+
     this.fullscreenButton = this.add.text(
       this.cameras.main.width - 20,
       20,
@@ -366,6 +372,27 @@ class Gameplay extends Phaser.Scene {
   }
 
   update() {
+
+            // Add the current player position to the path
+    this.playerPath.push({ x: player.x, y: player.y });
+
+    // Draw the entire polyline based on the player's path
+    this.polylineGraphics.clear();
+    this.polylineGraphics.beginPath();
+
+    if (this.playerPath.length > 1) {
+      this.polylineGraphics.moveTo(this.playerPath[0].x, this.playerPath[0].y);
+
+      for (let i = 1; i < this.playerPath.length; i++) {
+        this.polylineGraphics.lineTo(
+          this.playerPath[i].x,
+          this.playerPath[i].y
+        );
+      }
+    }
+
+    this.polylineGraphics.strokePath();
+
     this.playerCoordsText.setText(
       `Player Coordinates: ${Math.floor(player.x)}, ${Math.floor(player.y)}`
     );
