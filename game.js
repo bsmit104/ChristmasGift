@@ -18,6 +18,7 @@ class Gameplay extends Phaser.Scene {
     this.load.image("ship", "ship.png");
     this.load.image("key", "key.png");
     this.load.image("syd", "syd.png");
+    this.load.image("love", "love.png");
     this.load.image("bob", "enoki.png");
     this.load.image("rock", "rock.png");
 
@@ -68,6 +69,14 @@ class Gameplay extends Phaser.Scene {
     this.spaceText.setVisible(true);
     this.time.delayedCall(2000, () => {
       this.spaceText.setVisible(false); // Remove the text object
+    });
+  }
+
+  onPlayerLoveOverlap(player, chest) {
+    // Change this to the name of your "note" scene
+    this.loveText.setVisible(true);
+    this.time.delayedCall(2000, () => {
+      this.loveText.setVisible(false); // Remove the text object
     });
   }
 
@@ -211,6 +220,14 @@ class Gameplay extends Phaser.Scene {
       .setScrollFactor(0)
       .setVisible(false);
 
+    this.loveText = this.add
+      .text(this.cameras.main.width - 850, 700, "Key is around 3000 x or y", {
+        fontSize: "30px",
+        fill: "#fff",
+      })
+      .setScrollFactor(0)
+      .setVisible(false);
+
     this.spaceText = this.add
       .text(this.cameras.main.width - 850, 300, "hooligans", {
         fontSize: "40px",
@@ -255,6 +272,11 @@ class Gameplay extends Phaser.Scene {
     this.ship = this.physics.add
       .sprite(5000, 8000, "ship")
       .setScale(5)
+      .setDepth(2);
+
+    this.love = this.physics.add
+      .sprite(2000, 5000, "love")
+      .setScale(2.5)
       .setDepth(2);
 
     this.enoki = this.physics.add
@@ -311,6 +333,14 @@ class Gameplay extends Phaser.Scene {
       player,
       this.keySprite,
       this.onPlayerKeyOverlap,
+      null,
+      this
+    );
+
+    this.physics.add.overlap(
+      player,
+      this.love,
+      this.onPlayerLoveOverlap,
       null,
       this
     );
