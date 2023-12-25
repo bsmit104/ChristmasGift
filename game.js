@@ -1,7 +1,7 @@
 class Gameplay extends Phaser.Scene {
   constructor() {
     super("gameplay");
-    this.speed = 2; 
+    this.speed = 2;
     this.isFullScreen = true;
   }
 
@@ -14,16 +14,66 @@ class Gameplay extends Phaser.Scene {
     this.load.image("player4", "player4.png");
     this.load.image("player5", "player5.png");
     this.load.image("chest", "chest.png");
+    this.load.image("layla", "layla.png");
+    this.load.image("ship", "ship.png");
+    this.load.image("key", "key.png");
+    this.load.image("bob", "enoki.png");
     this.load.image("rock", "rock.png");
 
     // joystick
-    let url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexvirtualjoystickplugin.min.js';
-    this.load.plugin('rexvirtualjoystickplugin', url, true);
+    let url =
+      "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexvirtualjoystickplugin.min.js";
+    this.load.plugin("rexvirtualjoystickplugin", url, true);
   }
 
   onPlayerChestOverlap(player, chest) {
     // Change this to the name of your "note" scene
-    this.scene.start("note");
+    if (key == true) {
+      this.scene.start("note");
+    } else {
+      this.hintText.setVisible(true);
+    }
+    this.time.delayedCall(2000, () => {
+      this.hintText.setVisible(false); // Remove the text object
+    });
+  }
+
+  onPlayerLaylaOverlap(player, chest) {
+    // Change this to the name of your "note" scene
+    this.laylaText.setVisible(true);
+    this.time.delayedCall(2000, () => {
+      this.laylaText.setVisible(false); // Remove the text object
+    });
+  }
+
+  onPlayerMonkeyOverlap(player, chest) {
+    // Change this to the name of your "note" scene
+    this.monkeyText.setVisible(true);
+    this.time.delayedCall(2000, () => {
+      this.monkeyText.setVisible(false); // Remove the text object
+    });
+  }
+
+  onPlayerBobOverlap(player, chest) {
+    // Change this to the name of your "note" scene
+    this.bobText.setVisible(true);
+    this.time.delayedCall(2000, () => {
+      this.bobText.setVisible(false); // Remove the text object
+    });
+  }
+
+  onPlayerShipOverlap(player, chest) {
+    // Change this to the name of your "note" scene
+    this.spaceText.setVisible(true);
+    this.time.delayedCall(2000, () => {
+      this.spaceText.setVisible(false); // Remove the text object
+    });
+  }
+
+  onPlayerKeyOverlap(player, key2) {
+    // Change this to the name of your "note" scene
+    key = true;
+    key2.setVisible(false);
   }
 
   spawnRockWithinView() {
@@ -79,23 +129,23 @@ class Gameplay extends Phaser.Scene {
         );
       } else if (up) {
         rock.x = Phaser.Math.Between(
-            player.x - this.halfScreenWidth,
-            player.x + this.halfScreenWidth
+          player.x - this.halfScreenWidth,
+          player.x + this.halfScreenWidth
         );
         rock.y = Phaser.Math.Between(
           player.y - this.halfScreenHeight,
           player.y - this.halfScreenHeight - 50
         );
-    } else if (down) {
+      } else if (down) {
         rock.x = Phaser.Math.Between(
-            player.x - this.halfScreenWidth,
-            player.x + this.halfScreenWidth
+          player.x - this.halfScreenWidth,
+          player.x + this.halfScreenWidth
         );
         rock.y = Phaser.Math.Between(
-            player.y + this.halfScreenHeight + 50,
-            player.y + this.halfScreenHeight
+          player.y + this.halfScreenHeight + 50,
+          player.y + this.halfScreenHeight
         );
-    }
+      }
     }
   }
 
@@ -107,8 +157,7 @@ class Gameplay extends Phaser.Scene {
     }
     this.isFullScreen = !this.isFullScreen;
   }
-  
-  
+
   create() {
     this.cameras.main.setBackgroundColor("#e75480");
     cursors = this.input.keyboard.createCursorKeys();
@@ -116,45 +165,164 @@ class Gameplay extends Phaser.Scene {
     this.fullscreenButton = this.add.text(
       this.cameras.main.width - 20,
       20,
-      'Fullscreen',
+      "Fullscreen",
       {
-          fontSize: '16px',
-          fill: '#fff',
+        fontSize: "16px",
+        fill: "#fff",
       }
-  );
-      // .setOrigin(0, 0)
-      // .setDepth(2)
-      // .setInteractive()
-      // .on('pointerdown', () => this.toggleFullScreen(), this);
+    );
+
+    this.hintText = this.add
+      .text(this.cameras.main.width - 500, 300, "Its locked", {
+        fontSize: "50px",
+        fill: "#fff",
+      })
+      .setScrollFactor(0)
+      .setVisible(false);
+
+    this.laylaText = this.add
+      .text(this.cameras.main.width - 650, 300, "I AM THE GREAT LAYLA\nAN AGELESS BEING\nFROM SPACE", {
+        fontSize: "50px",
+        fill: "#fff",
+      })
+      .setScrollFactor(0)
+      .setVisible(false);
+
+    this.bobText = this.add
+      .text(this.cameras.main.width - 950, 300, "i saw some treasure south from here", {
+        fontSize: "30px",
+        fill: "#fff",
+      })
+      .setScrollFactor(0)
+      .setVisible(false);
+
+    this.monkeyText = this.add
+      .text(this.cameras.main.width - 850, 300, "monkey attack", {
+        fontSize: "80px",
+        fill: "#fff",
+      })
+      .setScrollFactor(0)
+      .setVisible(false);
+
+    this.spaceText = this.add
+      .text(this.cameras.main.width - 850, 300, "hooligans", {
+        fontSize: "40px",
+        fill: "#fff",
+      })
+      .setScrollFactor(0)
+      .setVisible(false);
 
     const screenWidth = this.cameras.main.width;
     const screenHeight = this.cameras.main.height;
 
-    this.playerCoordsText1 = this.add.text(this.cameras.main.width - 300, 50, 'FullScreen', {
-      fontSize: '20px',
-      fill: '#fff'
-    }).setScrollFactor(0);
+    this.playerCoordsText1 = this.add
+      .text(this.cameras.main.width - 300, 50, "FullScreen", {
+        fontSize: "20px",
+        fill: "#fff",
+      })
+      .setScrollFactor(0);
     this.playerCoordsText1.setScale(1.4);
     this.playerCoordsText1.setInteractive();
-    this.playerCoordsText1.on('pointerdown', () => this.toggleFullScreen(), this);
+    this.playerCoordsText1.on(
+      "pointerdown",
+      () => this.toggleFullScreen(),
+      this
+    );
 
-    this.playerCoordsText = this.add.text(20, 50, 'Player Coordinates: 0, 0', {
-      fontSize: '16px',
-      fill: '#fff'
-    }).setScrollFactor(0);
+    this.playerCoordsText = this.add
+      .text(20, 50, "Player Coordinates: 0, 0", {
+        fontSize: "16px",
+        fill: "#fff",
+      })
+      .setScrollFactor(0);
     this.playerCoordsText.setScale(1.4);
 
     this.worldWidth = 10000;
     this.worldHeight = 10000;
 
-    this.chest = this.physics.add.sprite(9000, 9000, 'chest').setScale(4).setDepth(2);
+    this.chest = this.physics.add
+      .sprite(9000, 9000, "chest")
+      .setScale(4)
+      .setDepth(2);
+
+    this.ship = this.physics.add
+      .sprite(5000, 8000, "ship")
+      .setScale(5)
+      .setDepth(2);
+
+    this.enoki = this.physics.add
+      .sprite(8000, 4000, "bob")
+      .setScale(5)
+      .setDepth(2);
+
+    this.keySprite = this.physics.add
+      .sprite(3000, 3000, "key")
+      .setScale(4)
+      .setDepth(2);
+
+    this.layla = this.physics.add
+      .sprite(3000, 8000, "layla")
+      .setScale(20)
+      .setDepth(2);
 
     this.physics.world.setBounds(0, 0, this.worldWidth, this.worldHeight);
 
-    player = this.physics.add.sprite(5000, 5000, playerKey).setScale(3).setDepth(2);
-    enemyEnoki = this.physics.add.sprite(5500, 5500, 'enoki').setScale(4).setDepth(2);
+    player = this.physics.add
+      .sprite(5000, 5000, playerKey)
+      .setScale(3)
+      .setDepth(2);
+    enemyEnoki = this.physics.add
+      .sprite(5500, 5500, "enoki")
+      .setScale(4)
+      .setDepth(2);
 
-    this.physics.add.overlap(player, this.chest, this.onPlayerChestOverlap, null, this);
+    this.physics.add.overlap(
+      player,
+      this.chest,
+      this.onPlayerChestOverlap,
+      null,
+      this
+    );
+
+    this.physics.add.overlap(
+      player,
+      this.enoki,
+      this.onPlayerBobOverlap,
+      null,
+      this
+    );
+
+    this.physics.add.overlap(
+      player,
+      this.layla,
+      this.onPlayerLaylaOverlap,
+      null,
+      this
+    );
+
+    this.physics.add.overlap(
+      player,
+      this.keySprite,
+      this.onPlayerKeyOverlap,
+      null,
+      this
+    );
+
+    this.physics.add.overlap(
+      player,
+      this.ship,
+      this.onPlayerShipOverlap,
+      null,
+      this
+    );
+
+    this.physics.add.overlap(
+      player,
+      enemyEnoki,
+      this.onPlayerMonkeyOverlap,
+      null,
+      this
+    );
 
     this.cameras.main.setBounds(0, 0, this.worldWidth, this.worldHeight);
     this.cameras.main.startFollow(player);
@@ -163,7 +331,7 @@ class Gameplay extends Phaser.Scene {
     this.spawnRockWithinView();
 
     this.physics.add.collider(rocks, player);
-    this.physics.add.collider(rocks, enemyEnoki)
+    this.physics.add.collider(rocks, enemyEnoki);
 
     // joystick
     // this.joyStick = this.plugins.get('rexvirtualjoystickplugin').add(this, {
@@ -173,7 +341,7 @@ class Gameplay extends Phaser.Scene {
     //   base: this.add.circle(0, 0, 100, 0x888888),
     //   thumb: this.add.circle(0, 0, 30, 0xcccccc),
     // });
-    this.joyStick = this.plugins.get('rexvirtualjoystickplugin').add(this, {
+    this.joyStick = this.plugins.get("rexvirtualjoystickplugin").add(this, {
       x: screenWidth / 5,
       y: screenHeight / 1.1,
       radius: screenWidth / 10,
@@ -194,13 +362,12 @@ class Gameplay extends Phaser.Scene {
     // // ... (existing code)
 
     // this.startTime = this.time.now;
-
-
   }
 
   update() {
-
-    this.playerCoordsText.setText(`Player Coordinates: ${Math.floor(player.x)}, ${Math.floor(player.y)}`);
+    this.playerCoordsText.setText(
+      `Player Coordinates: ${Math.floor(player.x)}, ${Math.floor(player.y)}`
+    );
 
     if (cursors.left.isDown) {
       player.body.setVelocityX(-250);
@@ -275,37 +442,42 @@ class Gameplay extends Phaser.Scene {
         // down = false;
       }
 
-
       // if (this.physics.overlap(player, enemyEnoki)) {
       //   console.log("Collision detected");
       //   this.scene.start("gameOver")
       //   // Handle collision behavior here, like game over or any other actions
       //   // this.scene.start("gameOver");
       // }
-
     }
 
     rocks.children.iterate(function (rock) {
       const cameraLeftBound = this.cameras.main.scrollX;
-      const cameraRightBound = this.cameras.main.scrollX + this.cameras.main.width;
+      const cameraRightBound =
+        this.cameras.main.scrollX + this.cameras.main.width;
       const cameraTopBound = this.cameras.main.scrollY;
-      const cameraBottomBound = this.cameras.main.scrollY + this.cameras.main.height;
-  
+      const cameraBottomBound =
+        this.cameras.main.scrollY + this.cameras.main.height;
+
       if (
-          rock.getBounds().right < cameraLeftBound ||
-          rock.getBounds().left > cameraRightBound ||
-          rock.getBounds().bottom < cameraTopBound ||
-          rock.getBounds().top > cameraBottomBound
+        rock.getBounds().right < cameraLeftBound ||
+        rock.getBounds().left > cameraRightBound ||
+        rock.getBounds().bottom < cameraTopBound ||
+        rock.getBounds().top > cameraBottomBound
       ) {
-          this.resetRock(rock);
+        this.resetRock(rock);
       }
-  }, this);
+    }, this);
 
     if (rocks.countActive() < 10) {
       this.spawnRockWithinView();
     }
     // Calculate the angle between the enemy and the player
-    const angle = Phaser.Math.Angle.Between(enemyEnoki.x, enemyEnoki.y, player.x, player.y);
+    const angle = Phaser.Math.Angle.Between(
+      enemyEnoki.x,
+      enemyEnoki.y,
+      player.x,
+      player.y
+    );
 
     // Set the velocity based on the angle
     enemyEnoki.setVelocityX(Math.cos(angle) * this.speed * 60);
@@ -313,10 +485,10 @@ class Gameplay extends Phaser.Scene {
 
     // const currentTime = Date.now();
     // const elapsedTime = currentTime - this.time; // Use this.time to track elapsed time
-    
+
     // console.log(elapsedTime)
     // if (elapsedTime >10000) {
-    //   this.speed += .0003; 
+    //   this.speed += .0003;
     //   console.log("Speed increased", this.speed);
 
     // }
@@ -328,8 +500,6 @@ class Gameplay extends Phaser.Scene {
     //   this.scene.start("title")
     // }
   }
-
-
 }
 
 class PlayerSelect extends Phaser.Scene {
@@ -425,30 +595,41 @@ class Note extends Phaser.Scene {
     this.halfScreenHeight = this.cameras.main.height / 2;
 
     // Display a congratulatory message
-    const congratsText = this.add.text(this.halfScreenWidth - 200, this.halfScreenHeight - 450, 'There is a note in the chest:', { 
-      fontSize: '40px', 
-      fill: '#fff',
-      align: 'center'
-    });
+    const congratsText = this.add.text(
+      this.halfScreenWidth - 200,
+      this.halfScreenHeight - 450,
+      "There is a note in the chest:",
+      {
+        fontSize: "40px",
+        fill: "#fff",
+        align: "center",
+      }
+    );
     congratsText.setOrigin(0.5);
 
-    const noteText = this.add.text(this.halfScreenWidth, this.halfScreenHeight, 'I will love you til the end of time.\nYou are the best part of my life.\nI love everything about you\nfrom your hair to your toes.\nI want to be my best self for you', { 
-      fontSize: '40px', 
-      fill: '#fff',
-      align: 'center'
-    });
+    const noteText = this.add.text(
+      this.halfScreenWidth,
+      this.halfScreenHeight,
+      "I will love you til the end of time.\nYou are the best part of my life.\nI love everything about you\nfrom your hair to your toes.\nI want to be my best self for you",
+      {
+        fontSize: "40px",
+        fill: "#fff",
+        align: "center",
+      }
+    );
     noteText.setOrigin(0.5);
 
     // Add a button to start the game
-    const startButton = this.add.text(this.halfScreenWidth, this.halfScreenHeight + 300, 'Play again', { 
-      fontSize: '40px', 
-      fill: '#fff',
-      align: 'center'
-    })
-    .setInteractive()
-    .on('pointerdown', () => {
-      this.scene.start('select'); // Change this to your gameplay scene name
-    });
+    const startButton = this.add
+      .text(this.halfScreenWidth, this.halfScreenHeight + 300, "Play again", {
+        fontSize: "40px",
+        fill: "#fff",
+        align: "center",
+      })
+      .setInteractive()
+      .on("pointerdown", () => {
+        this.scene.start("select"); // Change this to your gameplay scene name
+      });
     startButton.setOrigin(0.5);
   }
   update() {}
@@ -460,16 +641,16 @@ class Gameover extends Phaser.Scene {
   }
 
   create() {
-    this.add.text(400, 300, 'Game Over', { fontSize: '64px', fill: '#fff' });
+    this.add.text(400, 300, "Game Over", { fontSize: "64px", fill: "#fff" });
 
     // Add a button to restart the game
-    const playAgainButton = this.add.text(400, 400, 'Play Again', { fontSize: '32px', fill: '#fff' })
+    const playAgainButton = this.add
+      .text(400, 400, "Play Again", { fontSize: "32px", fill: "#fff" })
       .setInteractive()
-      .on('pointerdown', () => {
-        this.scene.start('select');
+      .on("pointerdown", () => {
+        this.scene.start("select");
       });
     playAgainButton.setOrigin(0.5);
-  
   }
 }
 
@@ -483,6 +664,7 @@ let right = false;
 let up = false;
 let down = false;
 let startingGame = false;
+let key = false;
 
 var config = {
   type: Phaser.AUTO,
@@ -508,11 +690,9 @@ var config = {
   input: {
     activePointers: 5,
   },
-  scene: [PlayerSelect, Gameplay, Gameover, Note] //Title, Gameplay, Gameover],
+  scene: [PlayerSelect, Gameplay, Gameover, Note], //Title, Gameplay, Gameover],
 };
 
-class Clock extends Phaser.Scene {
-
-}
+class Clock extends Phaser.Scene {}
 
 var game = new Phaser.Game(config);
