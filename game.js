@@ -17,6 +17,7 @@ class Gameplay extends Phaser.Scene {
     this.load.image("layla", "layla.png");
     this.load.image("ship", "ship.png");
     this.load.image("key", "key.png");
+    this.load.image("syd", "syd.png");
     this.load.image("bob", "enoki.png");
     this.load.image("rock", "rock.png");
 
@@ -159,7 +160,7 @@ class Gameplay extends Phaser.Scene {
   }
 
   create() {
-    this.cameras.main.setBackgroundColor("#e75480");
+    this.cameras.main.setBackgroundColor("#466d1d");
     cursors = this.input.keyboard.createCursorKeys();
 
     this.fullscreenButton = this.add.text(
@@ -268,8 +269,8 @@ class Gameplay extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, this.worldWidth, this.worldHeight);
 
     player = this.physics.add
-      .sprite(5000, 5000, playerKey)
-      .setScale(3)
+      .sprite(5000, 5000, 'syd')
+      .setScale(4)
       .setDepth(2);
     enemyEnoki = this.physics.add
       .sprite(5500, 5500, "enoki")
@@ -690,7 +691,7 @@ var config = {
   input: {
     activePointers: 5,
   },
-  scene: [PlayerSelect, Gameplay, Gameover, Note], //Title, Gameplay, Gameover],
+  scene: [Gameplay, Gameover, Note], //Title, Gameplay, Gameover],
 };
 
 class Clock extends Phaser.Scene {}
