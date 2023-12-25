@@ -305,20 +305,39 @@ class PlayerSelect extends Phaser.Scene {
   }
   create() {
     this.cameras.main.setBackgroundColor("#e75480");
-    this.title = this.add.image(560, 300, "title").setInteractive();
-    this.title.setScale(2);
 
-    this.character1 = this.add.image(300, 800, "matsutake").setInteractive();
-    this.character2 = this.add.image(500, 800, "player2").setInteractive();
-    this.character3 = this.add.image(700, 800, "player3").setInteractive();
-    this.character4 = this.add.image(700, 600, "player4").setInteractive();
-    this.character5 = this.add.image(500, 600, "player5").setInteractive();
+    // this.title = this.add.image(560, 300, "title").setInteractive();
+    // this.title.setScale(2);
 
-    this.character1.setScale(4);
-    this.character2.setScale(4);
-    this.character3.setScale(4);
-    this.character4.setScale(4);
-    this.character5.setScale(4);
+    // this.character1 = this.add.image(300, 800, "matsutake").setInteractive();
+    // this.character2 = this.add.image(500, 800, "player2").setInteractive();
+    // this.character3 = this.add.image(700, 800, "player3").setInteractive();
+    // this.character4 = this.add.image(700, 600, "player4").setInteractive();
+    // this.character5 = this.add.image(500, 600, "player5").setInteractive();
+
+    // this.character1.setScale(4);
+    // this.character2.setScale(4);
+    // this.character3.setScale(4);
+    // this.character4.setScale(4);
+    // this.character5.setScale(4);
+    const screenWidth = this.cameras.main.width;
+    const screenHeight = this.cameras.main.height;
+
+    this.title = this.add.image(screenWidth / 2, screenHeight / 4, "title").setInteractive();
+    this.title.setScale(1.5);
+
+    this.character1 = this.add.image(screenWidth / 5, screenHeight / 1.5, "matsutake").setInteractive();
+    this.character2 = this.add.image(screenWidth / 2.5, screenHeight / 1.5, "player2").setInteractive();
+    this.character3 = this.add.image(screenWidth / 1.8, screenHeight / 1.5, "player3").setInteractive();
+    this.character4 = this.add.image(screenWidth / 1.8, screenHeight / 2, "player4").setInteractive();
+    this.character5 = this.add.image(screenWidth / 2.5, screenHeight / 2, "player5").setInteractive();
+
+    const scaleMultiplier = 0.0035; // Adjust the scale factor as needed
+    this.character1.setScale(screenWidth * scaleMultiplier);
+    this.character2.setScale(screenWidth * scaleMultiplier);
+    this.character3.setScale(screenWidth * scaleMultiplier);
+    this.character4.setScale(screenWidth * scaleMultiplier);
+    this.character5.setScale(screenWidth * scaleMultiplier);
 
     this.character1.on("pointerdown", function () {
       selectCharacter("matsutake");
