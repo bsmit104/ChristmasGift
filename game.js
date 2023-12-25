@@ -17,6 +17,7 @@ class Gameplay extends Phaser.Scene {
     this.load.image("layla", "layla.png");
     this.load.image("ship", "ship.png");
     this.load.image("key", "key.png");
+    this.load.image("james", "james_clement.png");
     this.load.image("syd", "syd.png");
     this.load.image("love", "love.png");
     this.load.image("bob", "enoki.png");
@@ -61,6 +62,14 @@ class Gameplay extends Phaser.Scene {
     this.bobText.setVisible(true);
     this.time.delayedCall(2000, () => {
       this.bobText.setVisible(false); // Remove the text object
+    });
+  }
+
+  onPlayerJamesOverlap(player, chest) {
+    // Change this to the name of your "note" scene
+    this.jamesText.setVisible(true);
+    this.time.delayedCall(2000, () => {
+      this.jamesText.setVisible(false); // Remove the text object
     });
   }
 
@@ -212,6 +221,14 @@ class Gameplay extends Phaser.Scene {
       .setScrollFactor(0)
       .setVisible(false);
 
+    this.jamesText = this.add
+      .text(this.cameras.main.width - 950, 300, "James from survivor? - you\nI saw a weird mushroom\nman around 4000 y - James from Survivor", {
+        fontSize: "30px",
+        fill: "#fff",
+      })
+      .setScrollFactor(0)
+      .setVisible(false);
+
     this.monkeyText = this.add
       .text(this.cameras.main.width - 850, 300, "monkey attack", {
         fontSize: "80px",
@@ -279,6 +296,11 @@ class Gameplay extends Phaser.Scene {
       .setScale(2.5)
       .setDepth(2);
 
+    this.james = this.physics.add
+      .sprite(5000, 6000, "james")
+      .setScale(4)
+      .setDepth(2);
+
     this.enoki = this.physics.add
       .sprite(8000, 4000, "bob")
       .setScale(5)
@@ -325,6 +347,14 @@ class Gameplay extends Phaser.Scene {
       player,
       this.layla,
       this.onPlayerLaylaOverlap,
+      null,
+      this
+    );
+
+    this.physics.add.overlap(
+      player,
+      this.james,
+      this.onPlayerJamesOverlap,
       null,
       this
     );
